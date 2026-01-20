@@ -1,3 +1,4 @@
+# Functions used to calculate Cij. 
 from constants import n, S, D
 import numpy as np
 
@@ -9,6 +10,7 @@ L2H_cost = 1 # Unknown
 L2M_cost = 123
 
 
+# The function that reads Cij from vallgrind output
 def call_valgrind_WIP(I_refs, D_refs, LL_refs, I1_miss, D1_miss, LL_miss):
     L1_total = I_refs + D_refs - LL_refs
     L1_miss = I1_miss + D1_miss
@@ -27,21 +29,24 @@ def call_valgrind_WIP(I_refs, D_refs, LL_refs, I1_miss, D1_miss, LL_miss):
     return cycles * 1/clock_frequency
 
 
+# Use of class to get static functionallity
 class C_ij:
     stored_Cij = np.zeros([n+1,len(S)])
     nbr_valgrind_calls = 0
     nbr_calls = 0
 
+    # If C_ij has already been obtained from valgrind, use the stored result instead of re-running valgrind. If not, call valgrind
     def get_Cij(i,j):
         if (C_ij.stored_Cij[i, j] == 0):
             C_ij.stored_Cij[i, j] = call_valgrind(i,j)
             C_ij.nbr_valgrind_calls += 1
         C_ij.nbr_calls += 1
-        return call_valgrind(i,j)
-        #return C_ij.stored_Cij[i,j]
+        
+        return C_ij.stored_Cij[i,j]
 
     def get_nums():
         return (C_ij.nbr_calls, C_ij.nbr_valgrind_calls)
 
+# "Call valgrind" function used for testing
 def call_valgrind(i,j):
-    return 0.3 * i * 1/(3*j+0.1)
+    return 0.3 * i * 1/(S[j])

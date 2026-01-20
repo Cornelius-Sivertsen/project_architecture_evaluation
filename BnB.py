@@ -3,7 +3,13 @@ from Node import SolutionNode
 from Cij import C_ij
 import time
 
+"""
+Implements the branch and bound algorithm to minimize total cache size, with constraint of stability of the given scheduling policy
+"""
+
+#
 start_time = time.perf_counter()
+
 # Stores the cost of the best complete solution (terminal node) found so far. Initialized with the worst case solution
 best_cost = n*S[-1]
 
@@ -50,27 +56,39 @@ while (not(len(stack) == 0)):
                 # all succeeding partition sizes will also fail, so we can break out of the foor loop and save some cycles here.
                 break
 
+    if (nodes_visited % 1000000 == 0):
+        print(f"Visited {nodes_visited:.3E} nodes")
 
-    if (nodes_visited >= 7.4 * 10**20):
-        print("timed out")
+    
+    if (nodes_visited >= 10**10):
+        print(f"Timed out after visiting {nodes_visited} nodes")
         break
 
-
+# Get execution time information
 end_time = time.perf_counter()
 total_time = end_time - start_time
+
+# Print found final node
 print(f"Best solution node: i: {best_solution.i}, j: {best_solution.j}, cost: {best_solution.cost}, cons: {best_solution.cons}")
+
+# Print perfomance information
+print(f"n = {n}")
+print(f"k = {len(S)}")
 print(f"number of calls to cij: {C_ij.nbr_calls:.3E}, number of calls to valgrind: {C_ij.nbr_valgrind_calls}")
 print(f"end nodes visited: {terminal_nodes_visited:.3E}")
 print(f"nodes visited: {nodes_visited:.3E}")
 print(f"execution time: {total_time}")
 
+# Print out the entire path corresponding to the ideal solution
 print("Every node moving up from the bottom is:")
 aux = best_solution
 while (not(aux == None)):
     print(f"i: {aux.i}, j: {aux.j}")
     aux = aux.parent
 
+
+
 import comparison
 
-print(f"total number of end nodes: {comparison.nbr_extreme_nodes:.3E}")
-print(f"total number of nodes: {comparison.nbr_nodes:.3E}")
+print(f"Total number of terminal nodes in graph: {comparison.nbr_extreme_nodes:.3E}")
+print(f"Total mumber of nodes in graph: {comparison.nbr_nodes:.3E}")
