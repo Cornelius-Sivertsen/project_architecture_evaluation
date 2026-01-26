@@ -3,10 +3,10 @@ from constants import n, S, D
 import numpy as np
 
 CPI = 1/2
-clock_frequency = 1 # Unknown
+
 L1H_cost = 1
 L1M_cost = 13
-L2H_cost = 1 # Unknown
+
 L2M_cost = 123
 
 
@@ -22,11 +22,10 @@ def call_valgrind_WIP(I_refs, D_refs, LL_refs, I1_miss, D1_miss, LL_miss):
 
     cycles = (L1H_cost*L1_hit +
               L1M_cost*L1_miss +
-              L2H_cost*L2_hit +
               L2M_cost*L2_miss +
               execution_cycles)
 
-    return cycles * 1/clock_frequency
+    return cycles
 
 
 # Use of class to get static functionallity
