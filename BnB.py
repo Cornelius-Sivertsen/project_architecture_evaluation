@@ -1,16 +1,19 @@
-from constants import n, S, D, U_rm
+from global_vars import n, S, D, U_rm
 from Node import SolutionNode
 from Cij import C_ij
 import time
+import parse
 
 """
 Implements the branch and bound algorithm to minimize total cache size, with constraint of stability of the given scheduling policy
 """
 
+
 # Used for performance testing
 start_time = time.perf_counter()
 
 # Stores the cost of the best complete solution (terminal node) found so far. Initialized with the worst case solution
+
 best_cost = n*S[-1]
 
 # Stores the terminal node corresponding to the best solution found so far

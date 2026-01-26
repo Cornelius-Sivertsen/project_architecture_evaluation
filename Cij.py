@@ -1,6 +1,7 @@
 # Functions used to calculate Cij. 
-from constants import n, S, D
+from global_vars import n, S, D, processes
 import numpy as np
+import parse
 
 CPI = 1/2
 
@@ -11,7 +12,7 @@ L2M_cost = 123
 
 
 # The function that reads Cij from vallgrind output
-def call_valgrind_WIP(I_refs, D_refs, LL_refs, I1_miss, D1_miss, LL_miss):
+def calculate_cycles(I_refs, D_refs, LL_refs, I1_miss, D1_miss, LL_miss):
     L1_total = I_refs + D_refs - LL_refs
     L1_miss = I1_miss + D1_miss
     L1_hit = L1_total - L1_miss
@@ -46,6 +47,12 @@ class C_ij:
     def get_nums():
         return (C_ij.nbr_calls, C_ij.nbr_valgrind_calls)
 
-# "Call valgrind" function used for testing
+# Call valgrind function
 def call_valgrind(i,j):
-    return 0.3 * i * 1/(S[j])
+
+    if i == 0:
+        return 0
+
+    valgrind_result = parse.get_valgrind_result(i,j)
+    return calculate_cycles(*valgrind_result)
+

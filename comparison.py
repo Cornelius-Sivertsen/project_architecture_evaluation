@@ -1,4 +1,4 @@
-from constants import n, S
+from global_vars import n, S
 
 K = len(S)
 

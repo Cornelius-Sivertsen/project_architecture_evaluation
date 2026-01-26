@@ -1,5 +1,5 @@
 # Implements the nodes of the B&B tree
-from constants import n, S, D
+from global_vars import n, S, D
 from Cij import C_ij
 
 class SolutionNode:
@@ -32,6 +32,8 @@ class SolutionNode:
 
     # Calculates the cons field of a node.
     def constraint(self):
+        if self.i == 0:
+            return 0
         return self.parent.cons + C_ij.get_Cij(self.i,self.j) / D[self.i]
 
     
