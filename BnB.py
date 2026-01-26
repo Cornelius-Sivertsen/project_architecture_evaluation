@@ -1,4 +1,4 @@
-from global_vars import n, S, D, U_rm
+from global_vars import n, S, D, U_rm, processes
 from Node import SolutionNode
 from Cij import C_ij
 import time
@@ -7,7 +7,6 @@ import parse
 """
 Implements the branch and bound algorithm to minimize total cache size, with constraint of stability of the given scheduling policy
 """
-
 
 # Used for performance testing
 start_time = time.perf_counter()
@@ -96,8 +95,18 @@ while (not(aux == None)):
     aux = aux.parent
 
 
-
 import comparison
 
 print(f"Total number of terminal nodes in graph: {comparison.nbr_extreme_nodes:.3E}")
 print(f"Total mumber of nodes in graph: {comparison.nbr_nodes:.3E}")
+
+print("--------RESULTS--------")
+partition_size_per_process = dict.fromkeys(processes)
+aux = best_solution
+while (not(aux == None)):
+    partition_size_per_process[processes[aux.i]] = S[aux.j]
+    aux = aux.parent
+
+for process in partition_size_per_process.keys():
+    if process != "root":
+        print(f"process {process} assigned to partition size: {partition_size_per_process[process]}")
